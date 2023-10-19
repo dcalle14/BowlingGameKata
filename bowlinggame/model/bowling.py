@@ -178,4 +178,4 @@ class Game:
     def reset(self):
         self.frames = []
         self.roll_count = 0
-        self._init_frames()d
+        self._init_frames()
