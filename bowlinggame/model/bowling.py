@@ -152,3 +152,30 @@ class Game:
             raise IndexError("There are not enough frames to calculate score")
 
         return sum(frame.score() for frame in self.frames)
+
+    def add_roll(self, pins: int):
+        if self.roll_count >= Game.MAX_FRAMES * 2:
+            raise IndexError("The game is already completed.")
+
+        self.frames[self.current_frame_index].add_roll(pins)
+        if self.current_frame.is_strike() or len(self.current_frame.rolls) == 2:
+            self.roll_count += 1
+
+    def load_from_file(self, file_path: str):
+        with open(file_path, 'r') as file:
+            rolls = file.read().split()
+
+        for roll in rolls:
+            if roll == 'X':
+                self.add_roll(10)
+            elif roll == '/':
+                pins = 10 - self.current_frame.rolls[-1].pins
+                self.add_roll(pins)
+            else:
+                pins = int(roll)
+                self.add_roll(pins)
+
+    def reset(self):
+        self.frames = []
+        self.roll_count = 0
+        self._init_frames()d
